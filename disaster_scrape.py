@@ -7,6 +7,7 @@ text = []
 text2 = []
 text3 = []
 text4 = []
+text5 = []
 
 web = requests.get("http://cdd.publicsafety.gc.ca/rslts-eng.aspx?cultureCode=en-Ca&boundingBox=&provinces=&eventTypes=&eventStartDate=&injured=&evacuated=&totalCost=&dead=&normalizedCostYear=1&dynamic=false")
 g = web.content
@@ -35,6 +36,8 @@ for b in text:
             text3.append(0)
     other_counter = other_counter + 1
 
+
+
 oc = 1
 
 for b in text:
@@ -45,29 +48,76 @@ for b in text:
             text4.append(0)
     oc = oc + 1
 
-print(text4)
+oq = 5
+
+for b in text:
+    if (oq%8 == 0):
+        text5.append(b)
+    oq = oq + 1
+
+print(text5)
 
 
 
 finder = ["Earthquake", "Wildfire", "Storm", "Flood", "Landslide", "Tornado", "Avalanche", "Tsunami", "Drought"]
-count_array = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+count_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 over = 0
-for j in text2:
+for j in text5:
     co = 0
-    for r in finder:
-        if (j.find(r) > 0):
-            count_array[co] = count_array[co] + int(text4[over])
+    for r in month:
+        print(j.find(r))
+        if (j.find(r) >= 0):
+            count_array[co] = count_array[co] + 1
         co = co + 1
     over = over + 1
 
 print(count_array)
 
-fi = ["EQ", "WF", "ST", "FL", "LS", "TO", "AV", "TS", "DR"]
+the_data = []
 
-plt.bar(fi, count_array, align = 'center')
+t = 6
+
+for i in range(1, 9):
+    the_data.append((1.03**(i))*((count_array[(5+i)%12]*(1+(0.1*i)))/5)*30)
+
+for i in range(9, 17):
+    the_data.append((1.1**(i))*((count_array[(5+i)%12]*(1+(0.1*i)))/5)*30)
+
+for i in range(17, 25):
+    the_data.append((1.03**(i))*((count_array[(5+i)%12]*(1+(0.1*i)))/5)*30)
+
+print(the_data)
+
+final_data = []
+
+total = 0
+
+final_data.append(the_data[0])
+
+for r in range(1, len(the_data)):
+    a = the_data[r] + the_data[r-1]
+    final_data.append(a)
+
+print(final_data)
+
+total = 0
+
+for a in final_data:
+    total = total + a
+
+print(total/24)
+
+
+
+fi = ["EQ", "WF", "ST", "FL", "LS", "TO", "AV", "TS", "DR"]
+mo = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
+
+plt.bar(mo, count_array, align = 'center')
 plt.title("Natural Disasters")
-plt.xlabel("Type of disaster")
+plt.xlabel("Month")
 plt.ylabel("Number")
 
 plt.show()
