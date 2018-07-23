@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <nav class= "navbar navbar-expand-sm bg-light navbar-light">
+    <a class= "navbar-brand" href="#">
+      <img src= "Untitled9.png" style="width:50px;margin-left:0px;">
+    </a>
+    <ul class= "navbar-nav">
+      <li class= "nav-item">
+        <a class= "nav-link" href="#">Home</a>
+      </li>
+      &nbsp;&nbsp;&nbsp;
+      <li class= "nav-item">
+        <a class= "nav-link" href="#">Page 1</a>
+      </li>
+      &nbsp;&nbsp;&nbsp;
+      <li class= "nav-item">
+        <a class= "nav-link" href="#">Page 2</a>
+      </li>
+      &nbsp;&nbsp;&nbsp;
+      <li class= "nav-item">
+        <a class= "nav-link" href="#">Page 3</a>
+      </li>
+    </ul>
+  </nav>
+    <div class= "row">
+      <div class= "col-sm-2">
+        <center>
+        <table class= "table">
+          <thead class= "thead-dark" id="ou">
+            <tr id="oi">
+              <th id="lk">Chatrooms</th>
+            </tr>
+          </thead>
+          <tr id="on">
+            <td>Forest Fires</td>
+          </tr>
+          <tr id="tw">
+            <td>Flooding</td>
+          </tr>
+          <tr id="th">
+            <td>Storms</td>
+          </tr>
+          <tr id="fo">
+            <td>Tornado</td>
+          </tr>
+          <tr id="fi">
+            <td>Other</td>
+          </tr>
+        </table>
+      </center>
+      </div>
+      <div class= "col-sm-10">
+        <div class= "messages" id="me">
+        </div>
+        <center id="ce">
+        <input type="text" id="te" name="text" placeholder="Type a Username Here" style="padding-top:5px;padding-bottom:5px;">
+        <button type="button" id="be" name="button" onclick="bcd()" style="margin-top:-3px" class= "btn btn-success">Enter</button>
+        <span class="stuff">
+        <input type="text" id="tx" name="text" placeholder="Type a Message Here" style="display:none;padding-top:5px;padding-bottom:5px;">
+        <button type="button" id="bu" name="button" onclick="abc()" style="display:none;margin-top:-3px" class=" btn btn-success">Send</button>
+      </span>
+      </center>
+      </div>
+    </div>
+  <style>
+  body {
+    padding-bottom:100px;
+  }
+  .stuff {
+    display:inline-block;
+  }
+  nav {
+    min-height:60px;
+  }
+  #oi {
+    border-right:solid 1px;
+    border-left:solid 1px;
+  }
+  .table {
+    width:230px;
+    border-right:solid lightgray 1px;
+    border-bottom:solid lightgray 1px;
+    border-left:solid lightgray 1px;
+  }
+  thead, tr {
+    text-align:center;
+  }
+    .messages {
+      width:90vw;
+      margin-left:-10px;
+      overflow:scroll;
+      vertical-align:bottom;
+      height:600px;
+
+    }
+    .col-sm-2 {
+      height:296px;
+      margin-top:23vh;
+    }
+    .col-sm-10 {
+
+    }
+    #on:hover, #tw:hover, #th:hover, #fo:hover, #fi:hover {
+      background-color:lightgray;
+      cursor:pointer;
+    }
+    #ce {
+      margin-top:80px;
+      position:static;
+      margin-left:10vw;
+    }
+    .out {
+      background-color:lightgray;
+      width:300px;
+      border-radius:30px;
+      margin-top:30px;
+      margin-left:50px;
+    }
+    .in {
+      background-color:darkblue;
+      width:300px;
+      border-radius:30px;
+      margin-top:30px;
+      margin-left:60vw;
+      margin-right:30vw;
+      color:white;
+    }
+    .in p {
+      padding-top:7px;
+      padding-bottom:7px;
+      padding-left:15px;
+      padding-right:15px;
+    }
+    .out p {
+      padding-top:7px;
+      padding-bottom:7px;
+      padding-left:15px;
+      padding-right:15px;
+    }
+    #te {
+      width:40vw;
+      min-width:200px;
+    }
+    #tx {
+      width:40vw;
+      min-width:200px;
+    }
+  </style>
+  <script src = "/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io()
+    socket.on('event2', function (data) {
+      if (document.getElementById('te').value != data.substring(0, data.indexOf(":"))) {
+
+      var element = document.createElement('P')
+      var di = document.createElement('DIV')
+      di.className = "out"
+      var text = document.createTextNode(data)
+      element.appendChild(text)
+      di.appendChild(element)
+      document.getElementById('me').appendChild(di)
+    }
+    })
+    function abc() {
+      if (document.getElementById('tx').value.length > 0) {
+      var enter = document.getElementById('tx').value;
+      socket.emit("event1", document.getElementById('te').value+": "+enter)
+
+      var element = document.createElement('P')
+      var di = document.createElement('DIV')
+      di.className = "in"
+      var text = document.createTextNode(document.getElementById('tx').value)
+      element.appendChild(text)
+      di.appendChild(element)
+      document.getElementById('me').appendChild(di)
+
+      document.getElementById('tx').value = ""
+
+    }
+    }
+    function bcd() {
+      document.getElementById('te').style.display = "none"
+      document.getElementById('be').style.display = "none"
+      document.getElementById('tx').style.display = "inline-block"
+      document.getElementById('bu').style.display = "inline-block"
+    }
+  </script>
+</body>
+</html>
